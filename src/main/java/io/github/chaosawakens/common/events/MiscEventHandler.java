@@ -89,15 +89,19 @@ import net.minecraftforge.event.world.BlockEvent.BlockToolInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
 
 public class MiscEventHandler {
+	
+	@SubscribeEvent
 	public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
 		CommandDispatcher<CommandSource> commandDispatcher = event.getDispatcher();
 		CACommand.register(commandDispatcher);
 	}
 
+	@SubscribeEvent
 	public static void livingDeathEvent(LivingDeathEvent event) {
 		Entity entity = event.getEntity();
 		MinecraftServer server = entity.getServer();
@@ -132,6 +136,7 @@ public class MiscEventHandler {
 	}
 	
 	@SuppressWarnings("unused")
+	@SubscribeEvent
 	public static void onEnchant(EnchantmentLevelSetEvent event) {
 		World world = event.getWorld();
 		//I found that the best way to do this is to loop through each player
@@ -168,6 +173,7 @@ public class MiscEventHandler {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onMobXPDrop(LivingExperienceDropEvent event) {
 		PlayerEntity player = event.getAttackingPlayer();
 		if (player == null) return;
@@ -190,6 +196,7 @@ public class MiscEventHandler {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onBlockBreakXP(BlockEvent.BreakEvent event) {
 		PlayerEntity player = event.getPlayer();
 		if (player == null) return;
@@ -207,32 +214,39 @@ public class MiscEventHandler {
 	}
 	
 	// Account for paralysis actually taking full effect
+	@SubscribeEvent
 	public static void onLivingJump(LivingJumpEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onLivingAttack(AttackEntityEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onLivingUse(LivingEntityUseItemEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onLivingBlockPlace(EntityPlaceEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
 			if (event.isCancelable() && ((LivingEntity) event.getEntity()) instanceof PlayerEntity && ((LivingEntity) event.getEntity()).hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onBucketFill(FillBucketEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onPlayerItemPickup(ItemPickupEvent event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 		
@@ -246,22 +260,27 @@ public class MiscEventHandler {
 	}
 	
 	// Client side events to prevent the player/entity from swinging their hand or interacting while paralyzed
+	@SubscribeEvent
 	public static void onPlayerLeftClickInteractEmpty(LeftClickEmpty event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onPlayerRightClickInteractEmpty(RightClickEmpty event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onPlayerLeftClickInteractBlock(LeftClickBlock event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onPlayerRightClickInteractBlock(RightClickBlock event) {
 		if (event.isCancelable() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().hasEffect(CAEffects.PARALYSIS_EFFECT.get())) event.setCanceled(true);
 	}
 	
+	@SubscribeEvent
 	public static void onMobDrops(LivingDropsEvent event) {
 		ItemStack stack;
 		ItemEntity drop;
@@ -287,6 +306,7 @@ public class MiscEventHandler {
 		}
 	}
 
+	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		Entity entity = event.getEntity();
 		if (entity == null) return;
@@ -315,6 +335,7 @@ public class MiscEventHandler {
 		}
 	}
 
+	@SubscribeEvent
 	public static void onEntityJoin(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 		// Make villagers afraid of our entities
@@ -353,6 +374,7 @@ public class MiscEventHandler {
 		}
 	}
 
+	@SubscribeEvent
 	public static void onSleepFinished(SleepFinishedTimeEvent event) {
 		IWorld world = event.getWorld();
 		if (world instanceof ServerWorld) {
@@ -362,6 +384,7 @@ public class MiscEventHandler {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onUseHoeOnDense(BlockToolInteractEvent event) {
 		if(event.getToolType() == ToolType.HOE)
 			if(event.getState().is(CATags.Blocks.DENSE_DIRT))
@@ -370,6 +393,7 @@ public class MiscEventHandler {
 				event.setFinalState(CABlocks.TERRA_PRETA_FARMLAND.get().defaultBlockState());
 	}
 	
+	@SubscribeEvent
 	public static void onHoplologyArmorUpdate(LevelChange event) {
 		PlayerEntity player = event.getPlayer();
 		for(ItemStack armorStack : player.getArmorSlots()) {

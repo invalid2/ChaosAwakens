@@ -11,6 +11,11 @@ import io.github.chaosawakens.common.util.EnumUtils.StalagmiteBlockGenType;
 import io.github.chaosawakens.common.worldgen.feature.CrystalBranchConfig;
 import io.github.chaosawakens.common.worldgen.feature.GeodeFeatureConfig;
 import io.github.chaosawakens.common.worldgen.feature.StalagmiteFeatureConfig;
+import io.github.chaosawakens.common.worldgen.feature.tree.BranchedRhombusTrunk;
+import io.github.chaosawakens.common.worldgen.feature.tree.ConeFoliage;
+import io.github.chaosawakens.common.worldgen.feature.tree.ConiferBranch;
+import io.github.chaosawakens.common.worldgen.feature.tree.CuboidRoot;
+import io.github.chaosawakens.common.worldgen.feature.tree.MultiPartTreeFeatureConfig;
 import io.github.chaosawakens.common.worldgen.foliageplacer.ConiferousFoliagePlacer;
 import io.github.chaosawakens.common.worldgen.foliageplacer.CubicSkipFoliagePlacer;
 import io.github.chaosawakens.common.worldgen.foliageplacer.SpheroidFoliagePlacer;
@@ -334,6 +339,12 @@ public class CAConfiguredFeatures {
 	public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> MESOZOIC_TREE = register("mesozoic_tree", Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(States.MESOZOIC_LOG), new SimpleBlockStateProvider(States.MESOZOIC_LEAVES), new SpheroidFoliagePlacer(FeatureSpread.fixed(4), FeatureSpread.fixed(1), FeatureSpread.of(3, 1)), new GiantConiferTrunkPlacer(20, 2, 2, States.DENSE_DIRT), new TwoLayerFeature(1, 0, 2)).decorators(ImmutableList.of(new VinesBelowLeavesTreeDecorator(States.MESOZOIC_VINES))).heightmap(Heightmap.Type.MOTION_BLOCKING).build()));
 	public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> MESOZOIC_TREE_THIN = register("mesozoic_tree_thin", Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(States.MESOZOIC_LOG), new SimpleBlockStateProvider(States.MESOZOIC_LEAVES), new SpheroidFoliagePlacer(FeatureSpread.of(4, 0), FeatureSpread.fixed(0), FeatureSpread.fixed(4)), new ThinGiantTrunkPlacer(24, 3, 3, States.DENSE_DIRT), new TwoLayerFeature(1, 0, 2)).decorators(ImmutableList.of(new VinesBelowLeavesTreeDecorator(States.MESOZOIC_VINES))).heightmap(Heightmap.Type.MOTION_BLOCKING).build()));
 	
+	public static final ConfiguredFeature<MultiPartTreeFeatureConfig, ?> TEST_TREE = register("test_tree", 
+			CAFeatures.MULTIPART_TREE_FEATURE.get().configured(new MultiPartTreeFeatureConfig(States.DENSE_DIRT,
+					States.MESOZOIC_LOG, States.APPLE_LEAVES, RuleTests.BASE_DIRT, ImmutableList.of(
+							new CuboidRoot(FeatureSpread.of(3, 1), 3), new BranchedRhombusTrunk(FeatureSpread.of(13, 5), 3),
+							new ConiferBranch(FeatureSpread.fixed(5), 3), new ConeFoliage(FeatureSpread.of(5, 1), FeatureSpread.of(4, 2), FeatureSpread.fixed(5)) ))));
+	
 	public static final ConfiguredFeature<?, ?> TREES_CRYSTAL_PLAINS = register("trees_crystal_dimension", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(GREEN_CRYSTAL_TREE.weighted(0.4F), RED_CRYSTAL_TREE.weighted(0.3F), YELLOW_CRYSTAL_TREE.weighted(0.1F), PINK_CRYSTAL_TREE.weighted(0.045F), BLUE_CRYSTAL_TREE.weighted(0.2F), ORANGE_CRYSTAL_TREE.weighted(0.035F)), GREEN_CRYSTAL_TREE)).decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
 	public static final ConfiguredFeature<?, ?> TREES_APPLE = register("trees_apple", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(APPLE_TREE.weighted(0.1F), APPLE_TREE_BEES_005.weighted(0.04F), FANCY_APPLE_TREE.weighted(0.09F), FANCY_APPLE_TREE_BEES_005.weighted(0.02F)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(1).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(1, 0.01F, 1))));
 	public static final ConfiguredFeature<?, ?> TREES_CHERRY = register("trees_cherry", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(CHERRY_TREE.weighted(0.1F), CHERRY_TREE_BEES_005.weighted(0.01F), FANCY_CHERRY_TREE.weighted(0.09F), FANCY_CHERRY_TREE_BEES_005.weighted(0.02F)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(1).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(1, 0.01F, 1))));
@@ -342,6 +353,8 @@ public class CAConfiguredFeatures {
 	public static final ConfiguredFeature<?, ?> TREES_DENSE_FOREST = register("trees_dense_forest", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(DENSEWOOD_TREE.weighted(0.9F), DENSEWOOD_TREE_FANCY.weighted(0.1F), GINKGO_TREE_FANCY.weighted(0.4F)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(2).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.6F, 2))));
 	public static final ConfiguredFeature<?, ?> TREES_DENSE_GINKGO = register("trees_dense_ginkgo", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(GINKGO_TREE.weighted(0.9F), GINKGO_TREE_FANCY.weighted(0.3F), GINKGO_TREE_MEGA.weighted(0.05F)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(2).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.6F, 3))));
 	public static final ConfiguredFeature<?, ?> TREES_MESOZOIC = register("trees_mesozoic", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(MESOZOIC_TREE.weighted(0.9F), MESOZOIC_TREE_THIN.weighted(0.5F), GINKGO_TREE_MEGA.weighted(0.005F)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(2).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.5F, 4))));
+	
+	public static final ConfiguredFeature<?, ?> TREES_TEST = register("trees_test", Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(TEST_TREE.weighted(0.1f)), Feature.NO_OP.configured(new NoFeatureConfig()))).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(1).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(1, 0.01F, 1))));
 	
 	// NESTS
 	public static final ConfiguredFeature<?, ?> BROWN_ANT_NEST = register("nest_brown_ant", Feature.EMERALD_ORE.configured(new ReplaceBlockConfig(States.GRASS_BLOCK, States.BROWN_ANT_NEST)).decorated(Placement.DEPTH_AVERAGE.configured(new DepthAverageConfig(80, 50))));

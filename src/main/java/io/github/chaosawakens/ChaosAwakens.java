@@ -46,6 +46,7 @@ import io.github.chaosawakens.common.registry.CAVanillaCompat;
 import io.github.chaosawakens.common.registry.CAVillagerTrades;
 import io.github.chaosawakens.common.registry.CAVillagers;
 import io.github.chaosawakens.common.worldgen.BiomeLoadEventSubscriber;
+import io.github.chaosawakens.common.worldgen.feature.tree.CATreeParts;
 import io.github.chaosawakens.data.CAAdvancementProvider;
 import io.github.chaosawakens.data.CABlockModelProvider;
 import io.github.chaosawakens.data.CABlockStateProvider;
@@ -170,6 +171,7 @@ public class ChaosAwakens {
 		CALootModifiers.LOOT_MODIFIERS.register(eventBus);
 		CAFoliagePlacerTypes.FOLIAGE_PLACER_TYPES.register(eventBus);
 		CATreeDecoratorTypes.TREE_DECORATOR_TYPES.register(eventBus);
+		CATreeParts.TREE_PARTS.register(eventBus);
 		eventBus.addListener(EntitySetAttributeEventSubscriber::onEntityAttributeCreationEvent);
 
 		//TODO Armor set bonuses fix, merge extended items, merge other stuff
@@ -183,28 +185,7 @@ public class ChaosAwakens {
 		forgeBus.addListener(CAVillagerTrades::onWandererTradesEvent);
 		forgeBus.addListener(CAVillagerTrades::onVillagerTradesEvent);
 		forgeBus.addListener(CAVillagerTrades::onArchaeologistTradesEvent);
-		forgeBus.addListener(MiscEventHandler::onRegisterCommandEvent);
-		forgeBus.addListener(MiscEventHandler::livingDeathEvent);
-		forgeBus.addListener(MiscEventHandler::onMobDrops);
-		forgeBus.addListener(MiscEventHandler::onMobXPDrop);
-		forgeBus.addListener(MiscEventHandler::onBlockBreakXP);
-		forgeBus.addListener(MiscEventHandler::onEnchant);
-		forgeBus.addListener(MiscEventHandler::onLivingJump);
-		forgeBus.addListener(MiscEventHandler::onBucketFill);
-		forgeBus.addListener(MiscEventHandler::onLivingAttack);
-		forgeBus.addListener(MiscEventHandler::onLivingBlockPlace);
-		forgeBus.addListener(MiscEventHandler::onLivingUse);
-		forgeBus.addListener(MiscEventHandler::onPlayerInteract);
-		forgeBus.addListener(MiscEventHandler::onPlayerLeftClickInteractEmpty);
-		forgeBus.addListener(MiscEventHandler::onPlayerRightClickInteractEmpty);
-		forgeBus.addListener(MiscEventHandler::onPlayerLeftClickInteractBlock);
-		forgeBus.addListener(MiscEventHandler::onPlayerRightClickInteractBlock);
-		forgeBus.addListener(MiscEventHandler::onPlayerItemPickup);
-		forgeBus.addListener(MiscEventHandler::onPlayerLoggedIn);
-		forgeBus.addListener(MiscEventHandler::onEntityJoin);
-		forgeBus.addListener(MiscEventHandler::onSleepFinished);
-		forgeBus.addListener(MiscEventHandler::onUseHoeOnDense);
-		forgeBus.addListener(MiscEventHandler::onHoplologyArmorUpdate);
+		forgeBus.register(MiscEventHandler.class);
 		forgeBus.addListener(EventPriority.NORMAL, CAVanillaCompat::registerFurnaceFuel);
 		forgeBus.register(this);
 
