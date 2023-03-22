@@ -1,18 +1,14 @@
 package io.github.chaosawakens.common.events;
 
-import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import com.mojang.brigadier.CommandDispatcher;
 
 import io.github.chaosawakens.ChaosAwakens;
 import io.github.chaosawakens.api.IUtilityHelper;
-import io.github.chaosawakens.common.blocks.StrawberryBushBlock;
 import io.github.chaosawakens.common.config.CACommonConfig;
 import io.github.chaosawakens.common.enchantments.HoplologyEnchantment;
 import io.github.chaosawakens.common.entity.robo.RoboPounderEntity;
@@ -20,9 +16,7 @@ import io.github.chaosawakens.common.entity.robo.RoboSniperEntity;
 import io.github.chaosawakens.common.entity.robo.RoboWarriorEntity;
 import io.github.chaosawakens.common.registry.CABlocks;
 import io.github.chaosawakens.common.registry.CACommand;
-import io.github.chaosawakens.common.registry.CADimensions;
 import io.github.chaosawakens.common.registry.CAEffects;
-import io.github.chaosawakens.common.registry.CAEnchantments;
 import io.github.chaosawakens.common.registry.CAItems;
 import io.github.chaosawakens.common.registry.CATags;
 import net.minecraft.block.Blocks;
@@ -47,24 +41,19 @@ import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
 import net.minecraft.entity.monster.GiantEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.EndPodiumFeature;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DerivedWorldInfo;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -88,7 +77,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BlockToolInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
-import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
@@ -288,7 +276,7 @@ public class MiscEventHandler {
 		// ENDER DRAGON
 		if (event.getEntityLiving() instanceof EnderDragonEntity) {
 			EnderDragonEntity dragon = (EnderDragonEntity) event.getEntityLiving();
-
+			
 			// Drop #1: Ender Dragon Scales
 			int amount = 8 + (int) (Math.random() * 6) + (int) (Math.random() * event.getLootingLevel() * 4);
 			if (Objects.requireNonNull(dragon.getDragonFight()).hasPreviouslyKilledDragon()) amount /= 2; // Amount is halved with repeat kills.
@@ -311,10 +299,11 @@ public class MiscEventHandler {
 		Entity entity = event.getEntity();
 		if (entity == null) return;
 		if (CACommonConfig.COMMON.showUpdateMessage.get() && VersionChecker.getResult(ModList.get().getModContainerById(ChaosAwakens.MODID).get().getModInfo()).status == VersionChecker.Status.OUTDATED) {
-			entity.sendMessage(new StringTextComponent("A new version of ").withStyle(TextFormatting.WHITE)
-					.append(new StringTextComponent(ChaosAwakens.MODNAME).withStyle(TextFormatting.BOLD, TextFormatting.GOLD))
-					.append(new StringTextComponent(" is now available from: ").withStyle(TextFormatting.WHITE))
-					.append(new StringTextComponent("https://chaosawakens.github.io/downloads").withStyle((style) -> style.withColor(TextFormatting.GOLD).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://chaosawakens.github.io/downloads")))), Util.NIL_UUID);
+			entity.sendMessage( new TranslationTextComponent("misc.chaosawakens.update_available_message",
+					new StringTextComponent(ChaosAwakens.MODNAME).withStyle(TextFormatting.BOLD, TextFormatting.GOLD),
+					new StringTextComponent("https://chaosawakens.github.io/downloads").withStyle((style) ->
+					style.withColor(TextFormatting.GOLD).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+							"https://chaosawakens.github.io/downloads")))), Util.NIL_UUID);
 		}
 		if (IUtilityHelper.isUserOrEntityUUIDEqualTo(entity, UUID.fromString("89cd9d1b-9d50-4502-8bd4-95b9e63ff589"))) { // UUID of Blackout03_
 			Objects.requireNonNull(entity.getServer()).getPlayerList().broadcastMessage(new StringTextComponent("The Developer, ").withStyle(TextFormatting.GREEN)
@@ -376,8 +365,7 @@ public class MiscEventHandler {
 
 	@SubscribeEvent
 	public static void onSleepFinished(SleepFinishedTimeEvent event) {
-		IWorld world = event.getWorld();
-		if (world instanceof ServerWorld) {
+		if (event.getWorld() instanceof ServerWorld) {
 			ServerWorld level = (ServerWorld) event.getWorld();
 			if(level.dimension().location().getNamespace().equals("chaosawakens"))
 				level.getServer().overworld().setDayTime(event.getNewTime());

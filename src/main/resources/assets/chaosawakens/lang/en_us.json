@@ -1369,7 +1369,8 @@
 	
 	"misc.chaosawakens.empty_inventory": "Empty inventory required to acces Crystalworld!",
 	"misc.chaosawakens.inaccessible_dimension": "This dimension hasn't been added to the mod yet!",
-
+	"misc.chaosawakens.update_available_message": "A new version of %1$s is now available from: %2$s",
+	
 	"subtitles.chaosawakens.entity.emerald_gator.attack": "Emerald Gator bites",
 	"subtitles.chaosawakens.entity.emerald_gator.death": "Emerald Gator dies",
 	"subtitles.chaosawakens.entity.emerald_gator.hurt": "Emerald Gator hurts",
