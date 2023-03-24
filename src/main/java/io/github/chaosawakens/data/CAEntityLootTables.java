@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.github.chaosawakens.ChaosAwakens;
+import io.github.chaosawakens.common.loot.AfterFirstDragonFightFactor;
 import io.github.chaosawakens.common.registry.CABlocks;
 import io.github.chaosawakens.common.registry.CAEntityTypes;
 import io.github.chaosawakens.common.registry.CAItems;
@@ -23,6 +24,7 @@ import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.conditions.EntityHasProperty;
 import net.minecraft.loot.conditions.KilledByPlayer;
 import net.minecraft.loot.conditions.RandomChance;
+import net.minecraft.loot.conditions.RandomChanceWithLooting;
 import net.minecraft.loot.functions.EnchantWithLevels;
 import net.minecraft.loot.functions.LootingEnchantBonus;
 import net.minecraft.loot.functions.SetCount;
@@ -1096,17 +1098,31 @@ public class CAEntityLootTables extends EntityLootTables {
 										.when(KilledByPlayer.killedByPlayer())))
 						.withPool(LootPool.lootPool()
 								.setRolls(ConstantRange.exactly(1))
-		                        .add(ItemLootEntry.lootTableItem(CAItems.LETTUCE.get())
-				                        .apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))
-				                        .apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
-			                          	.when(KilledByPlayer.killedByPlayer())))
+								.add(ItemLootEntry.lootTableItem(CAItems.LETTUCE.get())
+										.apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))
+										.apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
+										.when(KilledByPlayer.killedByPlayer())))
 						.withPool(LootPool.lootPool()
 								.setRolls(ConstantRange.exactly(1))
-		                        .add(ItemLootEntry.lootTableItem(Items.CHICKEN)
-				                        .apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))
-				                        .apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
-				                        .apply(Smelt.smelted().when(EntityHasProperty.hasProperties(LootContext.EntityTarget.THIS, ENTITY_ON_FIRE)))
-			                          	.when(KilledByPlayer.killedByPlayer()))));
+								.add(ItemLootEntry.lootTableItem(Items.CHICKEN)
+										.apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))
+										.apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
+										.apply(Smelt.smelted().when(EntityHasProperty.hasProperties(LootContext.EntityTarget.THIS, ENTITY_ON_FIRE)))
+										.when(KilledByPlayer.killedByPlayer()))));
+		add(EntityType.ENDER_DRAGON,
+				LootTable.lootTable()
+				.withPool(LootPool.lootPool()
+						.setRolls(ConstantRange.exactly(1))
+                        .add(ItemLootEntry.lootTableItem(CAItems.ENDER_DRAGON_SCALE.get())
+		                        .apply(SetCount.setCount(RandomValueRange.between(8, 14)))
+		                        .apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
+		                        .apply(AfterFirstDragonFightFactor.fightFactor(0.5f))
+	                          	.when(KilledByPlayer.killedByPlayer())))
+				.withPool(LootPool.lootPool()
+						.setRolls(ConstantRange.exactly(1))
+						.when(RandomChanceWithLooting.randomChanceAndLootingBoost(0.025f, 0.01f))
+						.when(KilledByPlayer.killedByPlayer())
+						.add(ItemLootEntry.lootTableItem(Items.DRAGON_HEAD))));
 	}
 
 	@Override

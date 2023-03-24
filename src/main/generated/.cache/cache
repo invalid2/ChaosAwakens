@@ -5579,6 +5579,7 @@ e18bc97336e861a1dd9b4d27a47fe77fc61f6052 data/forge/tags/items/ores.json
 f8a39bb5d234315394a2828a5cddd3a0ee0002dc data/forge/tags/items/seeds.json
 9bbb7d7dc82c80721500e2ad811c782d14b4a7e6 data/forge/tags/items/stone.json
 e7b8184d1c840f0dc76759d3d112bd52b866c0d0 data/forge/tags/items/storage_blocks.json
+9bfc35d0b39546c6e6b31dbc9eb96a7350f6ac4b data/minecraft/loot_tables/entities/ender_dragon.json
 9a7f2022e5fd8a2e42345c0ee6a024f62b22a11d data/minecraft/loot_tables/entities/giant.json
 3fcd54d5b3c5bc9ccc2e4e52bcf57344966505aa data/minecraft/loot_tables/entities/illusioner.json
 4fc04a2f9432692a719895520ceb6d1b01d81417 data/minecraft/loot_tables/gameplay/fishing.json

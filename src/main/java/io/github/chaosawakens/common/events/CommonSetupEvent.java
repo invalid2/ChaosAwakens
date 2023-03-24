@@ -16,6 +16,7 @@ import io.github.chaosawakens.api.CarverWrapper;
 import io.github.chaosawakens.api.FeatureWrapper;
 import io.github.chaosawakens.common.config.CACommonConfig;
 import io.github.chaosawakens.common.integration.CAJER;
+import io.github.chaosawakens.common.loot.CATreasure;
 import io.github.chaosawakens.common.network.PacketHandler;
 import io.github.chaosawakens.common.registry.CABiomes;
 import io.github.chaosawakens.common.registry.CABlocks;
@@ -88,6 +89,7 @@ public class CommonSetupEvent {
 			if(modList.isLoaded("jeresources")) CAJER.init();
 		});
 
+		CATreasure.init();
 
 		BiomeDictionary.addTypes(RegistryKey.create(Registry.BIOME_REGISTRY, CABiomes.DENSE_PLAINS.getId()), CABiomes.Type.MINING_PARADISE, CABiomes.Type.DENSE_PLAINS);
 		BiomeDictionary.addTypes(RegistryKey.create(Registry.BIOME_REGISTRY, CABiomes.DENSE_FOREST.getId()), CABiomes.Type.MINING_PARADISE, CABiomes.Type.DENSE_FOREST);

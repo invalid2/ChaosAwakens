@@ -51,7 +51,9 @@ public class CATreasure {
 //	public static final CATreasure village_cherry_house = new CATreasure("village/cherry_house");
 
 	private static final Set<ResourceLocation> CA_LOOT_TABLES = Sets.newHashSet();
+	
 	public static LootFunctionType ENCHANT;
+	public static final LootFunctionType DRAGON_FIGHT_FACTOR = registerFunction("dragon_fight_factor", new LootFunctionType(new AfterFirstDragonFightFactor.Serializer()));
 
 	public final ResourceLocation lootTable;
 
@@ -60,7 +62,8 @@ public class CATreasure {
 	}
 
 	public static void init() {
-		ENCHANT = registerFunction("enchant", new LootFunctionType(new LootFunctionEnchant.Serializer()));
+		//ENCHANT = registerFunction("enchant", new LootFunctionType(new LootFunctionEnchant.Serializer()));
+		//DRAGON_FIGHT_FACTOR = registerFunction("dragon_fight_factor", new LootFunctionType(new DragonFightFactorFunction.Serializer()));
 	}
 
 	private static LootFunctionType registerFunction(String name, LootFunctionType function) {
