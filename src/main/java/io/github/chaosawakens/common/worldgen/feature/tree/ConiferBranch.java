@@ -8,7 +8,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.github.chaosawakens.common.util.PartDirection;
+import io.github.chaosawakens.common.util.PartGenerationStage;
 import net.minecraft.util.math.BlockPos.Mutable;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.feature.FeatureSpread;
@@ -53,10 +55,21 @@ public class ConiferBranch implements ITreePart {
 					}
 				}
 			}
-			return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), offy + 1, dir.getZ()), direction));
+			return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), offy + 1, dir.getZ()), direction, null));
 		} else {
-			return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), 0, dir.getZ()), direction));
+			return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), 0, dir.getZ()), direction, null));
 		}
 	}
 
+	@Override
+	public boolean canPlace(Start start) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public PartGenerationStage partGenerationStage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -6,24 +6,29 @@ import java.util.Random;
 import com.mojang.serialization.Codec;
 
 import io.github.chaosawakens.common.util.PartDirection;
+import io.github.chaosawakens.common.util.PartGenerationStage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
 
-interface ITreePart {
-	public static final Codec<ITreePart> CODEC = TreePartType.CODEC
-			.dispatch(ITreePart::type, TreePartType::codec);
+public interface ITreePart {
+	public static final Codec<ITreePart> CODEC = TreePartType.CODEC.dispatch(ITreePart::type, TreePartType::codec);
 
 	abstract TreePartType<? extends ITreePart> type();
+	
+	default MutableBoundingBox calculateBoundingBox(Random rand, Start partStart) {
+		return null;
+	}
+	
+	abstract boolean canPlace(ITreePart.Start start);
 	
 	abstract List<ITreePart.Start> place(ISeedReader reader, Random rand, BlockPos.Mutable startPos,
 			PartDirection direction, MultiPartTreeFeatureConfig config);
 	
-	default int getSize() {
-		return 0;
-	}
+	abstract PartGenerationStage partGenerationStage();
 	
 	static void setLog(ISeedReader reader, Random rand, BlockPos pos, MultiPartTreeFeatureConfig config) {
 		if(isFreeForLogs(reader, pos))
@@ -49,11 +54,24 @@ interface ITreePart {
 	public static final class Start {
 		final BlockPos startPos;
 		final PartDirection direction;
+		final PartGenerationStage stage;
 		
-		public Start(BlockPos startPos, PartDirection direction) {
+		public Start(BlockPos startPos, PartDirection direction, PartGenerationStage stage) {
 			this.startPos = startPos;
 			this.direction = direction;
-			
+			this.stage = stage;
+		}
+		
+		public BlockPos getStartPos() {
+			return startPos;
+		}
+		
+		public PartDirection getDirection() {
+			return direction;
+		}
+		
+		public PartGenerationStage getStage() {
+			return stage;
 		}
 	}
 }

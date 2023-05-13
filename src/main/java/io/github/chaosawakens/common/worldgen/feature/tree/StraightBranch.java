@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.github.chaosawakens.common.util.PartDirection;
+import io.github.chaosawakens.common.util.PartGenerationStage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.ISeedReader;
@@ -35,7 +36,19 @@ public class StraightBranch implements ITreePart {
 		if(direction != PartDirection.NONE)
 			for(int i = 0; i < length; i++)
 				ITreePart.setLog(reader, rand, startPos.offset(dir.getX()*i, 0, dir.getZ()*i), config);
-		return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), 0, dir.getZ()), PartDirection.NONE));
+		return Lists.newArrayList(new ITreePart.Start(startPos.offset(dir.getX(), 0, dir.getZ()), PartDirection.NONE, null));
+	}
+
+	@Override
+	public boolean canPlace(Start start) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public PartGenerationStage partGenerationStage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

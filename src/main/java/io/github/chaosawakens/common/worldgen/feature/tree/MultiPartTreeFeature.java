@@ -1,12 +1,17 @@
 package io.github.chaosawakens.common.worldgen.feature.tree;
 
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 
 import io.github.chaosawakens.common.util.PartDirection;
+import io.github.chaosawakens.common.util.PartGenerationStage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -22,13 +27,17 @@ public class MultiPartTreeFeature extends Feature<MultiPartTreeFeatureConfig> {
 	@Override
 	public boolean place(ISeedReader reader, ChunkGenerator gen, Random rand, BlockPos pos, MultiPartTreeFeatureConfig config) {
 		BlockPos startPos = new BlockPos(pos.getX(), reader.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos).getY(), pos.getZ());
-		if(!config.targetSurface.test(reader.getBlockState(startPos.below()), rand)) {
+		if(!reader.getBlockState(startPos.below()).is(config.targetSurface)) {
 			return false;
 		} else {
-			//TODO Change how this is done to be more efficient
-			List<ITreePart.Start> starts = Lists.newArrayList(new ITreePart.Start(startPos, PartDirection.NONE));
-			for (ITreePart part : config.parts) {
-				starts = placePart(starts, part, reader, gen, rand, config);
+			Queue<ITreePart.Start> treePartStartQueue = new PriorityQueue<>((a, b) -> a.getStage().compareTo(b.getStage()));
+			treePartStartQueue.add(new ITreePart.Start(startPos, PartDirection.NONE, PartGenerationStage.ROOT));
+			
+			PartGenerationStage currentStage = PartGenerationStage.ROOT;
+			List<ITreePart> currentStageParts = config.parts.stream()
+					.filter(part -> !part.partGenerationStage().equals(currentStage)).collect(Collectors.toList());
+			while(!treePartStartQueue.isEmpty()) {
+				//if(currentStage.equals(currentStageParts))
 			}
 			return true;
 		}

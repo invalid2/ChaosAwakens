@@ -1,5 +1,5 @@
 package io.github.chaosawakens.common.util;
 
 public enum PartGenerationStage {
-	BASE, BRANCH, FOLIAGE;
+	ROOT, TRUNK, BRANCH, FOLIAGE, DECORATION;
 }

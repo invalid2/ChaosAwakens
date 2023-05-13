@@ -20,16 +20,21 @@ public class StalagmiteFeature extends Feature<StalagmiteFeatureConfig> {
 
 	@Override
 	public boolean place(ISeedReader reader, ChunkGenerator gen, Random rand, BlockPos pos, StalagmiteFeatureConfig cfg) {
-		
-		boolean oreFlag = false;
+		//Micro-optimization : Instead of checking the Optional every loop, check it once and cache the result
+		boolean oreFlag = cfg.oresTag.isPresent();
 		float steepness = cfg.baseSteepness + ((rand.nextFloat() - 0.5F) * cfg.variation) * cfg.baseSteepness;
 		int variationFloor = (int) Math.floor(steepness);
 		int radius = cfg.baseRadius + (rand.nextInt(variationFloor * 2 + 1) - variationFloor);
 		if(radius == 0) radius++;
-		if(CACommonConfig.COMMON.enableStalagmiteOreGen.get())oreFlag = true;
+		// Don't generate ores when ore generation is deactivated
+		if(!CACommonConfig.COMMON.enableStalagmiteOreGen.get())oreFlag = false;
 		
 		Mutable mutable = new Mutable(pos.getX(), getLowestCorner(gen, pos, radius) + 1, pos.getZ());
+		
+		//Micro-optimization: Cache this math operation since the result is constant
 		float rrs = radius * radius * steepness;
+		
+		//Break from both for-s when Y bigger than height limit
 		higherthan255break:
 		for(int j = 0; j < rrs; j++) {
 			for(int i = -radius; i <= radius; i++) {
@@ -40,7 +45,7 @@ public class StalagmiteFeature extends Feature<StalagmiteFeatureConfig> {
 						if(mutable.getY() + j > 255)break higherthan255break;
 						if (oreFlag) {
 							if(cfg.oreChance >= rand.nextFloat()) {
-								reader.setBlock(mutable.offset(i, j, k), cfg.oresTag.getRandomElement(rand).defaultBlockState(), 2);
+								reader.setBlock(mutable.offset(i, j, k), cfg.oresTag.get().getRandomElement(rand).defaultBlockState(), 2);
 							} else {
 								reader.setBlock(mutable.offset(i, j, k), cfg.state, 2);
 							}

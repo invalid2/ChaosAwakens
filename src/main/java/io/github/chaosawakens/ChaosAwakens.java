@@ -171,7 +171,7 @@ public class ChaosAwakens {
 		CALootModifiers.LOOT_MODIFIERS.register(eventBus);
 		CAFoliagePlacerTypes.FOLIAGE_PLACER_TYPES.register(eventBus);
 		CATreeDecoratorTypes.TREE_DECORATOR_TYPES.register(eventBus);
-		CATreeParts.TREE_PARTS.register(eventBus);
+//		CATreeParts.TREE_PARTS.register(eventBus);
 		eventBus.addListener(EntitySetAttributeEventSubscriber::onEntityAttributeCreationEvent);
 
 		//TODO Armor set bonuses fix, merge extended items, merge other stuff

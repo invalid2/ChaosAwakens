@@ -310,7 +310,6 @@ public class BiomeLoadEventSubscriber {
 				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_PEACH);
 				
 //				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_TEST);
-				
 			}
 			if (BiomeDictionary.hasType(biome, CABiomes.Type.MINING_PARADISE)) {
 				if (CACommonConfig.COMMON.enableOreGen.get()) {
@@ -773,7 +772,7 @@ public class BiomeLoadEventSubscriber {
 			gen.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CAConfiguredFeatures.STALAGMITE_SKYSCRAPER);
 			gen.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CAConfiguredFeatures.STALAGMITE_CONE);
 			
-			gen.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CAConfiguredFeatures.STALAGMITE_COMMON_LIMESTONE);
+			gen.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CAConfiguredFeatures.STALAGMITE_LIMESTONE);
 		}
 
 		private static void addVillageManiaOres(BiomeGenerationSettingsBuilder gen) {

@@ -1,5 +1,7 @@
 package io.github.chaosawakens.common.worldgen.feature;
 
+import java.util.Optional;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -16,8 +18,7 @@ public class StalagmiteFeatureConfig implements IFeatureConfig {
 					Codec.intRange(1, 16).fieldOf("base_radius").forGetter(config -> config.baseRadius),
 					Codec.floatRange(0.1f, 10).fieldOf("base_steepness").forGetter(config -> config.baseSteepness),
 					Codec.floatRange(0, 10).fieldOf("variation").forGetter(config -> config.variation),
-					//TODO Make this optional for ore-less stalagies
-					ITag.codec(() -> TagCollectionManager.getInstance().getBlocks()).fieldOf("ores_tag")
+					ITag.codec(() -> TagCollectionManager.getInstance().getBlocks()).optionalFieldOf("ores_tag")
 						.forGetter(config -> config.oresTag),
 					Codec.floatRange(0, 1).fieldOf("ore_chance").forGetter(config -> config.oreChance)
 			).apply(builder, StalagmiteFeatureConfig::new));
@@ -26,11 +27,11 @@ public class StalagmiteFeatureConfig implements IFeatureConfig {
 	public final int baseRadius;
 	public final float baseSteepness;
 	public final float variation;	
-	public final ITag<Block> oresTag;
+	public final Optional<ITag<Block>> oresTag;
 	public final float oreChance;
 	
 	public StalagmiteFeatureConfig(BlockState state, int baseRadius, float baseSteepness, float variation,
-			ITag<Block> oresTag, float oreChance) {
+			Optional<ITag<Block>> oresTag, float oreChance) {
 		this.state = state;
 		this.baseRadius = baseRadius;
 		this.baseSteepness = baseSteepness;

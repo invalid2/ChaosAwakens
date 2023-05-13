@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.github.chaosawakens.common.util.PartDirection;
+import io.github.chaosawakens.common.util.PartGenerationStage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.feature.FeatureSpread;
@@ -45,9 +46,21 @@ public class SimpleCuboidTrunk implements ITreePart {
 			for (int j = -offsetStart; j < offsetwidth; j++)
 				for (int k = -offsetStart; k < offsetwidth; k++) {
 					ITreePart.setLog(reader, rand, startPos.offset(j, i, k), config);
-					if(i == 0)list.add(new ITreePart.Start(startPos.offset(j, height, k), PartDirection.NONE));
+					if(i == 0)list.add(new ITreePart.Start(startPos.offset(j, height, k), PartDirection.NONE, null));
 				}
 		return list;
+	}
+
+	@Override
+	public boolean canPlace(Start start) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public PartGenerationStage partGenerationStage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,6 +3,8 @@ package io.github.chaosawakens.common.worldgen.feature.tree;
 import java.util.function.Supplier;
 
 import io.github.chaosawakens.ChaosAwakens;
+import io.github.chaosawakens.common.worldgen.feature.tree.foliage.ConeFoliage;
+import io.github.chaosawakens.common.worldgen.feature.tree.foliage.ConiferBranchFoliage;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -20,10 +22,8 @@ public class CATreeParts {
 	
 	public static final RegistryObject<TreePartType<SimpleCuboidTrunk>> SIMPLE_CUBOID_TRUNK = TREE_PARTS.register(
 			"simple_cuboid_trunk", () -> new TreePartType<>(SimpleCuboidTrunk.CODEC));
-	public static final RegistryObject<TreePartType<SimpleRhombusTrunk>> SIMPLE_RHOMBUS_TRUNK = TREE_PARTS.register(
-			"simple_rhombus_trunk", () -> new TreePartType<>(SimpleRhombusTrunk.CODEC));
-	public static final RegistryObject<TreePartType<BranchedRhombusTrunk>> BRANCHED_RHOMBUS_TRUNK = TREE_PARTS.register(
-			"branched_rhombus_trunk", () -> new TreePartType<>(BranchedRhombusTrunk.CODEC));
+	public static final RegistryObject<TreePartType<RhombusTrunk>> RHOMBUS_TRUNK = TREE_PARTS.register(
+			"rhombus_trunk", () -> new TreePartType<>(RhombusTrunk.CODEC));
 	
 	public static final RegistryObject<TreePartType<StraightBranch>> STRAIGHT_BRANCH = TREE_PARTS.register(
 			"straight_branch", () -> new TreePartType<>(StraightBranch.CODEC));
@@ -32,4 +32,6 @@ public class CATreeParts {
 	
 	public static final RegistryObject<TreePartType<ConeFoliage>> CONE_FOLIAGE = TREE_PARTS.register("cone_foliage", 
 			() -> new TreePartType<>(ConeFoliage.CODEC));
+	public static final RegistryObject<TreePartType<ConiferBranchFoliage>> CONIFER_BRANCH_FOLIAGE = TREE_PARTS.register(
+			"conifer_branch_foliage", () -> new TreePartType<>(ConiferBranchFoliage.CODEC));
 }
