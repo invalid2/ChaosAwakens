@@ -309,7 +309,7 @@ public class BiomeLoadEventSubscriber {
 				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_CHERRY);
 				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_PEACH);
 				
-//				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_TEST);
+				gen.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, CAConfiguredFeatures.TREES_TEST);
 			}
 			if (BiomeDictionary.hasType(biome, CABiomes.Type.MINING_PARADISE)) {
 				if (CACommonConfig.COMMON.enableOreGen.get()) {

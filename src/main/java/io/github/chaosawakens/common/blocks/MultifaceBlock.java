@@ -27,9 +27,11 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.ICollisionReader;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 @SuppressWarnings("all")
@@ -111,6 +113,7 @@ public abstract class MultifaceBlock extends Block {
 		return true;
 	}
 
+	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
 		for(Direction direction : DIRECTIONS) {
 			if (this.isFaceSupported(direction)) {
@@ -126,15 +129,17 @@ public abstract class MultifaceBlock extends Block {
 	 * returns its solidified counterpart.
 	 * Note that this method should ideally consider only the specific direction passed in.
 	 */
-	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, World pWorld, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+	@Override
+	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, IWorld pWorld, BlockPos pCurrentPos, BlockPos pNeighborPos) {
 		if (!hasAnyFace(pState)) {
 			return Blocks.AIR.defaultBlockState();
 		} else {
 			return hasFace(pState, pDirection) && !canAttachTo(pWorld, pDirection, pNeighborPos, pNeighborState) ? removeFace(pState, getFaceProperty(pDirection)) : pState;
 		}
 	}
-
-	public VoxelShape getShape(BlockState pState, World pWorld, BlockPos pPos, ICollisionReader pContext) {
+	
+	@Override
+	public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
 		return this.shapesCache.get(pState);
 	}
 
@@ -155,10 +160,12 @@ public abstract class MultifaceBlock extends Block {
 		return flag;
 	}
 
+	@Override
 	public boolean canBeReplaced(BlockState pState, BlockItemUseContext pUseContext) {
 		return hasAnyVacantFace(pState);
 	}
-
+	
+	@Override
 	@Nullable
 	public BlockState getStateForPlacement(BlockItemUseContext pContext) {
 		World world = pContext.getLevel();
@@ -202,6 +209,7 @@ public abstract class MultifaceBlock extends Block {
 	 * @deprecated call via {@link net.minecraft.block.AbstractBlock.AbstractBlockState#rotate} whenever
 	 * possible. Implementing/overriding is fine.
 	 */
+	@Override
 	public BlockState rotate(BlockState pState, Rotation pRotation) {
 		return !this.canRotate ? pState : this.mapDirections(pState, pRotation::rotate);
 	}
@@ -212,6 +220,7 @@ public abstract class MultifaceBlock extends Block {
 	 * @deprecated call via {@link net.minecraft.block.AbstractBlock.AbstractBlockState#mirror} whenever
 	 * possible. Implementing/overriding is fine.
 	 */
+	@Override
 	public BlockState mirror(BlockState pState, Mirror pMirror) {
 		if (pMirror == Mirror.FRONT_BACK && !this.canMirrorX) {
 			return pState;
@@ -237,7 +246,7 @@ public abstract class MultifaceBlock extends Block {
 		return state.hasProperty(booleanproperty) && state.getValue(booleanproperty);
 	}
 
-	public static boolean canAttachTo(World world, Direction dir, BlockPos pos, BlockState state) {
+	public static boolean canAttachTo(IWorld world, Direction dir, BlockPos pos, BlockState state) {
 		return Block.isFaceFull(state.getBlockSupportShape(world, pos), dir.getOpposite()) || Block.isFaceFull(state.getCollisionShape(world, pos), dir.getOpposite());
 	}
 
